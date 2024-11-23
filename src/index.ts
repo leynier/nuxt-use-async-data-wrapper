@@ -26,14 +26,14 @@ export type AsyncDataWrapper<T> = {
       ? /**
          * Functions without arguments.
          * @param options - Optional AsyncDataOptions to configure useAsyncData.
-         * @returns AsyncDataResult containing the data, pending state, and error.
+         * @returns AsyncDataResult containing the data, status state, and error.
          */
         (options?: AsyncDataOptions<R>) => AsyncDataResult<R>
       : /**
          * Functions with arguments.
          * @param argsSupplier - A function that returns the arguments array for the original function.
          * @param options - Optional AsyncDataOptions to configure useAsyncData.
-         * @returns AsyncDataResult containing the data, pending state, and error.
+         * @returns AsyncDataResult containing the data, status state, and error.
          */
         (
           argsSupplier: () => Args,

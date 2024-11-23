@@ -88,10 +88,10 @@ import { ref } from 'vue';
 const id = ref(1);
 
 // Function without arguments
-const { data: dataList, pending: listPending, error: listError } = wrappedService.fetchData();
+const { data: dataList, status: listStatus, error: listError } = wrappedService.fetchData();
 
 // Function with arguments
-const { data: itemData, pending: itemPending, error: itemError } = wrappedService.getItem(() => [id.value]);
+const { data: itemData, status: itemStatus, error: itemError } = wrappedService.getItem(() => [id.value]);
 
 // Reactivity: when id.value changes, itemData updates automatically
 </script>
@@ -99,7 +99,7 @@ const { data: itemData, pending: itemPending, error: itemError } = wrappedServic
 <template>
   <div>
     <h1>Data List</h1>
-    <div v-if="listPending">Loading...</div>
+    <div v-if="listStatus === 'pending'">Loading...</div>
     <div v-else-if="listError">Error: {{ listError.message }}</div>
     <div v-else>
       <pre>{{ dataList }}</pre>
@@ -107,7 +107,7 @@ const { data: itemData, pending: itemPending, error: itemError } = wrappedServic
 
     <h1>Item Data (ID: {{ id }})</h1>
     <input v-model="id" type="number" min="1" />
-    <div v-if="itemPending">Loading...</div>
+    <div v-if="itemStatus === 'pending'">Loading...</div>
     <div v-else-if="itemError">Error: {{ itemError.message }}</div>
     <div v-else>
       <pre>{{ itemData }}</pre>
@@ -160,7 +160,7 @@ async function fetchData() {
 const wrappedService = useAsyncDataWrapper({ fetchData });
 
 // Use in a component
-const { data, pending, error } = wrappedService.fetchData();
+const { data, status, error } = wrappedService.fetchData();
 ```
 
 ### Function With Arguments
@@ -179,7 +179,7 @@ import { ref } from 'vue';
 
 const id = ref(1);
 
-const { data, pending, error } = wrappedService.getItem(() => [id.value]);
+const { data, status, error } = wrappedService.getItem(() => [id.value]);
 
 // When id.value changes, data is automatically refreshed
 ```
@@ -193,7 +193,7 @@ You can pass options to `useAsyncData` through the wrapped functions to control 
 ### Example with Options
 
 ```typescript
-const { data, pending, error } = wrappedService.fetchData({
+const { data, status, error } = wrappedService.fetchData({
   lazy: true,
   server: false,
   default: () => [],

@@ -8,7 +8,6 @@
             "DOM"
         ],
         "declaration": true,
-        "declarationDir": "types",
         "outDir": "lib",
         "strict": true,
         "esModuleInterop": true,

@@ -10,16 +10,18 @@ type AsyncDataResult<T> = AsyncData<T, Error>;
 /**
  * Transforms an object's Promise-returning functions into functions compatible with useAsyncData.
  *
+ * Only includes functions that return Promises; other properties are excluded.
+ *
  * For each function in the object:
  * - If the function returns a Promise and takes no arguments, it becomes a function that accepts optional AsyncDataOptions.
  * - If the function returns a Promise and takes arguments, it becomes a function that accepts an argsSupplier and optional AsyncDataOptions.
  *
- * This allows you to use the functions within a Nuxt application, leveraging the reactivity and data fetching capabilities of useAsyncData.
- *
  * @template T - The type of the object.
  */
 export type AsyncDataWrapper<T> = {
-  [K in keyof T]: T[K] extends (...args: infer Args) => Promise<infer R>
+  [K in keyof T as T[K] extends (...args: any[]) => Promise<any>
+    ? K
+    : never]: T[K] extends (...args: infer Args) => Promise<infer R>
     ? Args extends []
       ? /**
          * Functions without arguments.

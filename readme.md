@@ -3,7 +3,7 @@
 Utility for wrapping Promise-based functions with Nuxt's `useAsyncData`, simplifying integration with Nuxt's reactivity and server-side rendering capabilities.
 
 [![npm version](https://img.shields.io/npm/v/nuxt-use-async-data-wrapper.svg)](https://www.npmjs.com/package/nuxt-use-async-data-wrapper)
-[![license](https://img.shields.io/npm/l/nuxt-use-async-data-wrapper.svg)](https://github.com/leynier/nuxt-use-async-data-wrapper/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/nuxt-use-async-data-wrapper.svg)](https://github.com/leynier/nuxt-use-async-data-wrapper/blob/main/license)
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "nuxt-use-async-data-wrapper",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A utility to wrap Promise-returning functions with useAsyncData for Nuxt",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

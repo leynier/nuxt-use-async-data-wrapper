@@ -101,7 +101,11 @@ export function useAsyncDataWrapper<T extends Record<string, any>>(
         // Call useAsyncData with the generated key and function
         const asyncDataResult = useAsyncData(
           dataKeyRef.value,
-          () => originalFunction(...unref(argsRef)),
+          () => {
+            const result = originalFunction(...unref(argsRef));
+            // Ensure we return a Promise
+            return result instanceof Promise ? result : Promise.resolve(result);
+          },
           {
             // Re-execute when arguments change
             watch: [argsRef],
@@ -113,10 +117,18 @@ export function useAsyncDataWrapper<T extends Record<string, any>>(
         return asyncDataResult;
       } else {
         // For functions without arguments
-        const asyncDataResult = useAsyncData(key, () => originalFunction(), {
-          // Spread additional options
-          ...options,
-        });
+        const asyncDataResult = useAsyncData(
+          key,
+          () => {
+            const result = originalFunction();
+            // Ensure we return a Promise
+            return result instanceof Promise ? result : Promise.resolve(result);
+          },
+          {
+            // Spread additional options
+            ...options,
+          },
+        );
 
         return asyncDataResult;
       }

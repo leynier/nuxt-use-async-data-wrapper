@@ -65,12 +65,21 @@ export function useAsyncDataWrapper<T extends Record<string, any>>(
   obj: T,
 ): AsyncDataWrapper<T> {
   const composable = {} as AsyncDataWrapper<T>;
-  const proto = Object.getPrototypeOf(obj);
 
-  // Get function names from the object's prototype, excluding the constructor
-  const functionNames = Object.getOwnPropertyNames(proto).filter(
-    key => key !== 'constructor' && typeof obj[key] === 'function',
-  );
+  // Get all function names from the object and its prototypes
+  const functionNameSet = new Set<string>();
+  let currentObj = obj;
+  while (currentObj && currentObj !== Object.prototype) {
+    const keys = Object.getOwnPropertyNames(currentObj);
+    for (const key of keys) {
+      // Exclude constructor and non-function properties
+      if (key !== 'constructor' && typeof currentObj[key] === 'function') {
+        functionNameSet.add(key);
+      }
+    }
+    currentObj = Object.getPrototypeOf(currentObj);
+  }
+  const functionNames = Array.from(functionNameSet);
 
   for (const key of functionNames) {
     // Bind the function to preserve context

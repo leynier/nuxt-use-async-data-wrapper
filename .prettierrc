@@ -1,0 +1,10 @@
+{
+    "singleQuote": true,
+    "vueIndentScriptAndStyle": true,
+    "singleAttributePerLine": true,
+    "htmlWhitespaceSensitivity": "strict",
+    "arrowParens": "avoid",
+    "bracketSameLine": true,
+    "jsxSingleQuote": true,
+    "proseWrap": "always"
+}

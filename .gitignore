@@ -25,7 +25,8 @@ pnpm-debug.log*
 
 # Idea/VSCode settings
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
 
 # Miscellaneous
 *.tgz

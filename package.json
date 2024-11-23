@@ -25,10 +25,11 @@
     "url": "https://github.com/leynier/nuxt-use-async-data-wrapper.git"
   },
   "peerDependencies": {
-    "vue": "^3.0.0",
-    "nuxt": "^3.0.0"
+    "nuxt": "^3.0.0",
+    "vue": "^3.0.0"
   },
   "devDependencies": {
+    "prettier": "^3.3.3",
     "typescript": "^5.7.2",
     "vue": "^3.5.13"
   },

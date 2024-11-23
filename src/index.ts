@@ -33,7 +33,10 @@ export type AsyncDataWrapper<T> = {
          * @param options - Optional AsyncDataOptions to configure useAsyncData.
          * @returns AsyncDataResult containing the data, pending state, and error.
          */
-        (argsSupplier: () => Args, options?: AsyncDataOptions<R>) => AsyncDataResult<R>
+        (
+          argsSupplier: () => Args,
+          options?: AsyncDataOptions<R>,
+        ) => AsyncDataResult<R>
     : never;
 };
 
@@ -56,13 +59,15 @@ export type AsyncDataWrapper<T> = {
  * const wrappedObject = useAsyncDataWrapper(originalObject);
  * ```
  */
-export function useAsyncDataWrapper<T extends Record<string, any>>(obj: T): AsyncDataWrapper<T> {
+export function useAsyncDataWrapper<T extends Record<string, any>>(
+  obj: T,
+): AsyncDataWrapper<T> {
   const composable = {} as AsyncDataWrapper<T>;
   const proto = Object.getPrototypeOf(obj);
 
   // Get function names from the object's prototype, excluding the constructor
   const functionNames = Object.getOwnPropertyNames(proto).filter(
-    key => key !== 'constructor' && typeof obj[key] === 'function'
+    key => key !== 'constructor' && typeof obj[key] === 'function',
   );
 
   for (const key of functionNames) {
@@ -89,7 +94,9 @@ export function useAsyncDataWrapper<T extends Record<string, any>>(obj: T): Asyn
         // Reactive reference to arguments
         const argsRef = computed(() => argsSupplier!());
         // Unique key for useAsyncData
-        const dataKeyRef = computed(() => `${key}-${JSON.stringify(argsRef.value)}`);
+        const dataKeyRef = computed(
+          () => `${key}-${JSON.stringify(argsRef.value)}`,
+        );
 
         // Call useAsyncData with the generated key and function
         const asyncDataResult = useAsyncData(
@@ -100,7 +107,7 @@ export function useAsyncDataWrapper<T extends Record<string, any>>(obj: T): Asyn
             watch: [argsRef],
             // Spread additional options
             ...options,
-          }
+          },
         );
 
         return asyncDataResult;

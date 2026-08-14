@@ -1,11 +1,16 @@
-import { AsyncData, AsyncDataOptions, useAsyncData } from 'nuxt/app';
+import {
+  AsyncData,
+  AsyncDataOptions,
+  NuxtError,
+  useAsyncData,
+} from 'nuxt/app';
 import { computed, unref } from 'vue';
 
 /**
  * Type alias for the result returned by useAsyncData.
  * @template T - The type of the data returned by the function.
  */
-type AsyncDataResult<T> = AsyncData<T, Error>;
+type AsyncDataResult<T> = AsyncData<T | null, NuxtError | null>;
 
 /**
  * Transforms an object's Promise-returning functions into functions compatible with useAsyncData.
@@ -93,7 +98,7 @@ function getFunctionNames(obj: any): string[] {
 function getWrappedFunction(
   functionName: string,
   originalFunction: (...args: any[]) => Promise<any>,
-): (...args: any[]) => AsyncDataResult<Promise<any>> {
+): (...args: any[]) => AsyncDataResult<any> {
   return (...args: any[]) => {
     if (typeof args[0] === 'function') {
       // Function with arguments: first argument is argsSupplier, second is options
@@ -120,8 +125,8 @@ function getWrappedFunctionWithArgs<T extends (...args: any[]) => Promise<any>>(
   functionName: string,
   originalFunction: T,
   argsSupplier: () => Parameters<T>,
-  options: AsyncDataOptions<ReturnType<T>>,
-): AsyncDataResult<ReturnType<T>> {
+  options: AsyncDataOptions<Awaited<ReturnType<T>>>,
+): AsyncDataResult<Awaited<ReturnType<T>>> {
   // Reactive reference to arguments
   const argsRef = computed(() => argsSupplier!());
   // Unique key for useAsyncData
@@ -131,11 +136,7 @@ function getWrappedFunctionWithArgs<T extends (...args: any[]) => Promise<any>>(
   // Call useAsyncData with the generated key and function
   const asyncDataResult = useAsyncData(
     dataKeyRef.value,
-    () => {
-      const result = originalFunction(...unref(argsRef));
-      // Ensure we return a Promise
-      return result instanceof Promise ? result : Promise.resolve(result);
-    },
+    async () => originalFunction(...unref(argsRef)),
     {
       // Re-execute when arguments change
       watch: [argsRef],
@@ -149,16 +150,12 @@ function getWrappedFunctionWithArgs<T extends (...args: any[]) => Promise<any>>(
 function getWrapedFunctionWithoutArgs<T extends () => Promise<any>>(
   functionName: string,
   originalFunction: T,
-  options: AsyncDataOptions<ReturnType<T>>,
-): AsyncDataResult<ReturnType<T>> {
+  options: AsyncDataOptions<Awaited<ReturnType<T>>>,
+): AsyncDataResult<Awaited<ReturnType<T>>> {
   // For functions without arguments
   const asyncDataResult = useAsyncData(
     functionName,
-    () => {
-      const result = originalFunction();
-      // Ensure we return a Promise
-      return result instanceof Promise ? result : Promise.resolve(result);
-    },
+    async () => originalFunction(),
     {
       // Spread additional options
       ...options,

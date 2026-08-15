@@ -1,0 +1,4 @@
+# pnpm settings (see https://pnpm.io/settings).
+minimumReleaseAge: 0
+allowBuilds:
+  esbuild: true

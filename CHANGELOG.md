@@ -43,6 +43,8 @@ and this project adheres to
 - Declared `engines.node` `>=18` and marked the package as side-effect free.
 - Upgraded TypeScript `moduleResolution` from the deprecated `Node` to
   `Bundler`.
+- Upgraded the TypeScript development dependency to v7 and set an explicit
+  `rootDir` in `tsconfig.json` as required by the new compiler.
 
 ## [1.2.0] - 2024-11-23
 

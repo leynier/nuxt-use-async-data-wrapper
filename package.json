@@ -44,7 +44,7 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "nuxt": "^3.21.11",
+    "nuxt": "^4.5.2",
     "prettier": "^3.3.3",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10",

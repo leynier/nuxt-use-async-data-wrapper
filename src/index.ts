@@ -5,7 +5,9 @@ import { computed, unref, type WatchSource } from 'vue';
  * Type alias for the result returned by useAsyncData.
  * @template T - The type of the data returned by the function.
  */
-type AsyncDataResult<T> = AsyncData<T | null, NuxtError | null>;
+type AsyncDataResult<T> =
+  | AsyncData<T | null, NuxtError | null>
+  | AsyncData<T | undefined, NuxtError | undefined>;
 
 /**
  * Options accepted by useAsyncDataWrapper.
